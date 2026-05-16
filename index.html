@@ -244,6 +244,69 @@ html, body {
     padding-bottom: calc(3rem - 80px - 1.5rem) !important;
   }
 }
+
+/* ── MODALE LOGO ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 30, 50, 0.72);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open {
+  display: flex;
+}
+.modal-box {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: min(90vw, 640px);
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 24px 64px rgba(23,56,109,.18);
+  animation: modal-in 220ms cubic-bezier(.16,1,.3,1);
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.modal-box img {
+  max-width: 100%;
+  max-height: calc(90vh - 5rem);
+  object-fit: contain;
+  display: block;
+}
+.modal-close {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: #f4ecdf;
+  border: 1px solid rgba(23,56,109,.12);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: background 150ms;
+  z-index: 10;
+}
+.modal-close:hover { background: #e8dcc8; }
+.modal-close svg { stroke: #17386d; }
+
+/* Rendre les vignettes cliquables */
+.logo-item {
+  cursor: pointer;
+  transition: transform 180ms, box-shadow 180ms;
+}
+.logo-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(23,56,109,.12);
+}
 </style>
 </head>
 <body>
@@ -346,6 +409,56 @@ html, body {
     const dx = e.changedTouches[0].clientX - sx;
     if(Math.abs(dx) > 40) go(dx < 0 ? cur+1 : cur-1);
   });
+})();
+</script>
+
+<!-- MODALE LOGO -->
+<div class="modal-overlay" id="logoModal" role="dialog" aria-modal="true" aria-label="Logo agrandi">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Fermer">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <img id="modalImg" src="" alt="Logo Brign'Beach agrandi" />
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay  = document.getElementById('logoModal');
+  const modalImg = document.getElementById('modalImg');
+  const closeBtn = document.getElementById('modalClose');
+
+  // Ajouter listener sur chaque logo-item
+  document.querySelectorAll('.logo-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      const src = item.querySelector('img').src;
+      const alt = item.querySelector('img').alt;
+      modalImg.src = src;
+      modalImg.alt = alt;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  // Fermer via croix
+  closeBtn.addEventListener('click', close);
+  // Fermer via clic sur l'overlay (hors modale)
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) close();
+  });
+  // Fermer via Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') close();
+  });
+
+  function close() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function(){ modalImg.src = ''; }, 250);
+  }
 })();
 </script>
 </body>
