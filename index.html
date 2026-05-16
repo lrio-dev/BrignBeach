@@ -307,6 +307,59 @@ html, body {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(23,56,109,.12);
 }
+
+/* ── MODALE PHOTO ── */
+.photo-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(10, 15, 25, 0.92);
+  backdrop-filter: blur(12px);
+  align-items: center;
+  justify-content: center;
+}
+.photo-modal-overlay.open {
+  display: flex;
+}
+.photo-modal-box {
+  position: relative;
+  max-width: 96vw;
+  max-height: 96vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modal-in 240ms cubic-bezier(.16,1,.3,1);
+}
+.photo-modal-box img {
+  max-width: 96vw;
+  max-height: 96vh;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+/* Croix très discrète pour les photos */
+.photo-modal-close {
+  position: fixed;
+  top: 1.2rem;
+  right: 1.2rem;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: background 200ms, opacity 200ms;
+  opacity: .35;
+  z-index: 120;
+}
+.photo-modal-close:hover { background: rgba(255,255,255,.18); opacity: .9; }
+.photo-modal-close svg { stroke: #fff; }
+
+/* Slides cliquables */
+.slide img {
+  cursor: zoom-in;
+}
 </style>
 </head>
 <body>
@@ -458,6 +511,51 @@ html, body {
     overlay.classList.remove('open');
     document.body.style.overflow = '';
     setTimeout(function(){ modalImg.src = ''; }, 250);
+  }
+})();
+</script>
+
+<!-- MODALE PHOTO -->
+<div class="photo-modal-overlay" id="photoModal" role="dialog" aria-modal="true" aria-label="Photo agrandie">
+  <button class="photo-modal-close" id="photoModalClose" aria-label="Fermer">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+  <div class="photo-modal-box">
+    <img id="photoModalImg" src="" alt="Photo Brign'Beach agrandie" />
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay  = document.getElementById('photoModal');
+  const modalImg = document.getElementById('photoModalImg');
+  const closeBtn = document.getElementById('photoModalClose');
+
+  // Clic sur image du carrousel photo
+  document.querySelectorAll('.slide img').forEach(function(img) {
+    img.addEventListener('click', function() {
+      modalImg.src = img.src;
+      modalImg.alt = img.alt;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay || e.target === document.querySelector('.photo-modal-box')) close();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+  });
+
+  function close() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function(){ modalImg.src = ''; }, 280);
   }
 })();
 </script>
