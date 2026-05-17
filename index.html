@@ -498,10 +498,10 @@ html, body {
 }
 #shdr.on #shdr-sky { opacity: 1; }
 #shdr-sky img { height: 72px; width: auto; display: block; }
-/* Lignes — prolongement base skyline */
+/* Lignes — prolongement base skyline (calculé : 15px de transparence en bas) */
 #shdr-line-l, #shdr-line-r {
   position: absolute;
-  bottom: 4px;
+  bottom: 15px;
   height: 1.5px;
   background: #17386d;
   opacity: 0;
@@ -509,30 +509,22 @@ html, body {
 }
 #shdr-line-l {
   left: 0;
-  right: calc(50% + 127px);
+  right: calc(50% + 160px);
 }
 #shdr-line-r {
-  left: calc(50% + 127px);
+  left: calc(50% + 160px);
   right: 0;
 }
 #shdr.on #shdr-line-l,
 #shdr.on #shdr-line-r { opacity: .28; }
 /* ══ END STICKY v6 ══ */
 
-/* Mobile : masquer les barres sticky et réduire la skyline sticky */
+
+/* Mobile : skyline centrée, nom masqué */
 @media (max-width: 640px) {
-  #shdr-sky { display: none; }
+  #shdr-name { display: none; }
+  #shdr-sky { display: block; }
   #shdr-line-l, #shdr-line-r { display: none; }
-  #shdr-name {
-    font-size: .7rem;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: opacity 300ms ease 200ms;
-  }
-  #shdr.on #shdr-name {
-    opacity: 1;
-    transform: translateX(-50%);
-  }
 }
 </style>
 </head>
