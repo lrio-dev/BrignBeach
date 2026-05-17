@@ -498,30 +498,42 @@ html, body {
 }
 #shdr.on #shdr-sky { opacity: 1; }
 #shdr-sky img { height: 72px; width: auto; display: block; }
-/* Lignes hardcodées — bord gauche à calc(50% - 127px), bord droit à calc(50% + 127px) */
-#shdr-line-l {
+/* Lignes — prolongement base skyline */
+#shdr-line-l, #shdr-line-r {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: calc(50% + 127px);
+  bottom: 4px;
   height: 1.5px;
   background: #17386d;
   opacity: 0;
   transition: opacity 400ms ease 150ms;
 }
+#shdr-line-l {
+  left: 0;
+  right: calc(50% + 127px);
+}
 #shdr-line-r {
-  position: absolute;
-  bottom: 0;
   left: calc(50% + 127px);
   right: 0;
-  height: 1.5px;
-  background: #17386d;
-  opacity: 0;
-  transition: opacity 400ms ease 150ms;
 }
 #shdr.on #shdr-line-l,
 #shdr.on #shdr-line-r { opacity: .28; }
 /* ══ END STICKY v6 ══ */
+
+/* Mobile : masquer les barres sticky et réduire la skyline sticky */
+@media (max-width: 640px) {
+  #shdr-sky { display: none; }
+  #shdr-line-l, #shdr-line-r { display: none; }
+  #shdr-name {
+    font-size: .7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 300ms ease 200ms;
+  }
+  #shdr.on #shdr-name {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
 </style>
 </head>
 <body>
