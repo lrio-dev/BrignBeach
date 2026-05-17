@@ -600,35 +600,28 @@ html, body {
   display: block;
 }
 
-/* Lignes marines gauche et droite — partent depuis les bords de la skyline centrée */
+/* Lignes marines — deux segments depuis les bords de la skyline */
 .shdr-half-line {
   position: absolute;
   bottom: 0;
   height: 1.5px;
   background: #17386d;
   opacity: 0;
-  transition: opacity 400ms ease 100ms, width 520ms cubic-bezier(.16,1,.3,1) 100ms;
-  width: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition: opacity 300ms ease 80ms, max-width 600ms cubic-bezier(.16,1,.3,1) 80ms;
 }
 #shdr-line-l {
-  right: 50%;
-  margin-right: calc(var(--sky-half, 200px));  /* partira du bord gauche de la skyline */
+  right: calc(50% + var(--sky-half, 200px));
   left: 0;
-  transform-origin: right;
-  transform: scaleX(0);
-  transition: opacity 400ms ease 100ms, transform 520ms cubic-bezier(.16,1,.3,1) 100ms;
 }
 #shdr-line-r {
-  left: 50%;
-  margin-left: calc(var(--sky-half, 200px));   /* partira du bord droit de la skyline */
+  left: calc(50% + var(--sky-half, 200px));
   right: 0;
-  transform-origin: left;
-  transform: scaleX(0);
-  transition: opacity 400ms ease 100ms, transform 520ms cubic-bezier(.16,1,.3,1) 100ms;
 }
 #shdr.on .shdr-half-line {
   opacity: .28;
-  transform: scaleX(1);
+  max-width: 100vw;
 }
 /* ══ END STICKY HEADER v4 ══ */
 </style>
@@ -748,11 +741,9 @@ html, body {
   /* Calculer la demi-largeur de la skyline pour ajuster les lignes */
   function setSkyVar(){
     if(skyEl){
-      var half = Math.round(skyEl.offsetWidth / 2) + 'px';
-      document.getElementById('shdr-line-l').style.right = 'calc(50% + ' + half + ')';
-      document.getElementById('shdr-line-r').style.left  = 'calc(50% + ' + half + ')';
-      document.getElementById('shdr-line-l').style.marginRight = '0';
-      document.getElementById('shdr-line-r').style.marginLeft  = '0';
+      var half = Math.round(skyEl.offsetWidth / 2);
+      // Mettre à jour la CSS variable sur le header
+      hdr.style.setProperty('--sky-half', half + 'px');
     }
   }
   window.addEventListener('load', setSkyVar);
