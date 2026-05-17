@@ -655,5 +655,70 @@ html, body {
 })();
 </script>
 
+
+<!-- MODAL LOGOS -->
+<div class="modal-overlay" id="logoModal">
+  <div class="modal-box">
+    <button class="modal-close" id="logoModalClose" aria-label="Fermer">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke-width="2" stroke-linecap="round">
+        <line x1="2" y1="2" x2="14" y2="14"/><line x1="14" y1="2" x2="2" y2="14"/>
+      </svg>
+    </button>
+    <img id="logoModalImg" src="" alt="Logo" />
+  </div>
+</div>
+
+<!-- MODAL PHOTOS -->
+<div class="photo-modal-overlay" id="photoModal">
+  <button class="photo-modal-close" id="photoModalClose" aria-label="Fermer">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round">
+      <line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/>
+    </svg>
+  </button>
+  <div class="photo-modal-box">
+    <img id="photoModalImg" src="" alt="Photo" />
+  </div>
+</div>
+<script>
+/* ── Modals logos + photos ── */
+(function(){
+  /* LOGOS */
+  var logoOverlay = document.getElementById('logoModal');
+  var logoImg     = document.getElementById('logoModalImg');
+  var logoClose   = document.getElementById('logoModalClose');
+
+  document.querySelectorAll('.logo-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      var src = item.querySelector('img').src;
+      logoImg.src = src;
+      logoOverlay.classList.add('open');
+    });
+  });
+  function closeLogo(){ logoOverlay.classList.remove('open'); logoImg.src=''; }
+  logoClose.addEventListener('click', closeLogo);
+  logoOverlay.addEventListener('click', function(e){ if(e.target === logoOverlay) closeLogo(); });
+
+  /* PHOTOS */
+  var photoOverlay = document.getElementById('photoModal');
+  var photoImg     = document.getElementById('photoModalImg');
+  var photoClose   = document.getElementById('photoModalClose');
+
+  document.querySelectorAll('.slide img').forEach(function(img){
+    img.addEventListener('click', function(){
+      photoImg.src = img.src;
+      photoOverlay.classList.add('open');
+    });
+  });
+  function closePhoto(){ photoOverlay.classList.remove('open'); photoImg.src=''; }
+  photoClose.addEventListener('click', closePhoto);
+  photoOverlay.addEventListener('click', function(e){ if(e.target === photoOverlay) closePhoto(); });
+
+  /* Escape */
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ closeLogo(); closePhoto(); }
+  });
+})();
+</script>
+
 </body>
 </html>
